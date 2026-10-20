@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}কুরআন কন্টেন্ট — কুরআনিফাই{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>📜 কুরআন কন্টেন্ট ও আয়াত ব্যবস্থাপনা</h1>
+        <p>সূরাসমূহ ও বিশুদ্ধ আরবি পাঠ এবং বাংলা অনুবাদ পরিমার্জন</p>
+    </div>
+
+    <div class="grid-two-columns">
+        <div class="section-card">
+            <h2>➕ নতুন আয়াত সংযুক্ত করুন</h2>
+            <form method="POST" action="{{ url_for('admin_quran') }}" class="admin-form">
+                <input type="hidden" name="action" value="add_verse">
+                
+                <div class="form-group">
+                    <label for="surah_number">সূরা নির্বাচন:</label>
+                    <select id="surah_number" name="surah_number" required>
+                        {% for s in surahs %}
+                        <option value="{{ s['number'] }}">{{ s['number'] }}. সূরা {{ s['name_bengali'] }} ({{ s['name_arabic'] }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="verse_number">আয়াত নম্বর:</label>
+                    <input type="number" id="verse_number" name="verse_number" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="text_arabic">আরবি ক্যালিগ্রাফি পাঠ (Uthmani Arabic):</label>
+                    <textarea id="text_arabic" name="text_arabic" rows="3" dir="rtl" class="arabic-input" required placeholder="بِسْمِ اللَّهِ..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="text_bengali">বাংলা অনুবাদ (মুহিউদ্দীন খান):</label>
+                    <textarea id="text_bengali" name="text_bengali" rows="3" required placeholder="শুরু করছি আল্লাহর নামে..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="audio_url">অডিও স্ট্রিমিং URL (ঐচ্ছিক):</label>
+                    <input type="url" id="audio_url" name="audio_url" placeholder="https://everyayah.com/data/...">
+                </div>
+
+                <button type="submit" class="btn btn-gold btn-block">আয়াত ডাটাবেজে সংরক্ষণ করুন</button>
+            </form>
+        </div>
+
+        <div class="section-card">
+            <h2>📖 বর্তমান আয়াতসমূহের নমুনা (Recent Verses)</h2>
+            <div class="verses-scrollable">
+                {% for v in verses %}
+                <div class="verse-admin-item">
+                    <div class="verse-meta">
+                        <strong>সূরা {{ v['surah_name'] }} ({{ v['surah_number'] }}:{{ v['verse_number'] }})</strong>
+                    </div>
+                    <div class="verse-arabic" dir="rtl">{{ v['text_arabic'] }}</div>
+                    <div class="verse-bengali">{{ v['text_bengali'] }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

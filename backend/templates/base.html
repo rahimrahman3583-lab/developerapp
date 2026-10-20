@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}কুরআনিফাই ওয়েব এডমিন প্যানেল{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-wrapper">
+        {% if session.get('user_id') %}
+        <nav class="admin-sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-icon">📖</span>
+                <h2>কুরআনিফাই</h2>
+                <small>এডমিন প্যানেল</small>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="{{ url_for('admin_dashboard') }}" class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}">📊 ড্যাশবোর্ড</a></li>
+                <li><a href="{{ url_for('admin_users') }}" class="{% if request.endpoint == 'admin_users' %}active{% endif %}">👥 ব্যবহারকারী</a></li>
+                <li><a href="{{ url_for('admin_quran') }}" class="{% if request.endpoint == 'admin_quran' %}active{% endif %}">📜 কুরআন কন্টেন্ট</a></li>
+                <li><a href="{{ url_for('admin_payments') }}" class="{% if request.endpoint == 'admin_payments' %}active{% endif %}">💳 পেমেন্ট অনুমোদন</a></li>
+                <li><a href="{{ url_for('admin_audit_logs') }}" class="{% if request.endpoint == 'admin_audit_logs' %}active{% endif %}">🛡️ অডিট লগ</a></li>
+                <li class="logout-link"><a href="{{ url_for('admin_logout') }}">🚪 লগআউট</a></li>
+            </ul>
+        </nav>
+        {% endif %}
+
+        <main class="admin-main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

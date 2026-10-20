@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}ড্যাশবোর্ড — কুরআনিফাই এডমিন{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="page-header">
+        <h1>📊 সিস্টেম ড্যাশবোর্ড</h1>
+        <p>কুরআনিফাই ইসলামিক লাইভ ডাটাবেজ পর্যবেক্ষণ ও সার্বিক অবস্থা</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+                <h3>মোট ইউজার</h3>
+                <p class="stat-number">{{ total_users }}</p>
+            </div>
+        </div>
+        <div class="stat-card gold">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-info">
+                <h3>প্রিমিয়াম ইউজার</h3>
+                <p class="stat-number">{{ premium_users }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📖</div>
+            <div class="stat-info">
+                <h3>মোট সূরা</h3>
+                <p class="stat-number">{{ total_surahs }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✍️</div>
+            <div class="stat-info">
+                <h3>আয়াত সংখ্যা</h3>
+                <p class="stat-number">{{ total_verses }}</p>
+            </div>
+        </div>
+        <div class="stat-card {% if pending_payments > 0 %}warning{% endif %}">
+            <div class="stat-icon">💳</div>
+            <div class="stat-info">
+                <h3>অপেক্ষমান পেমেন্ট</h3>
+                <p class="stat-number">{{ pending_payments }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>🛡️ সাম্প্রতিক এডমিন কার্যক্রম (Audit Trail)</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>সময়</th>
+                    <th>প্রশাসক</th>
+                    <th>অ্যাকশন</th>
+                    <th>টার্গেট</th>
+                    <th>বিবরণ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in recent_logs %}
+                <tr>
+                    <td>{{ log['timestamp'] }}</td>
+                    <td><strong>{{ log['admin_username'] }}</strong></td>
+                    <td><span class="badge">{{ log['action'] }}</span></td>
+                    <td>{{ log['target'] }}</td>
+                    <td>{{ log['details'] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">কোনো পূর্ববর্তী কার্যক্রম রেকর্ড নেই।</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

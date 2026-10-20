@@ -1,0 +1,6 @@
+{
+  "name": "Quranify Islamic",
+  "description": "Professional Islamic application with Holy Quran recitation, Bengali translations, Prayer Times, Qibla compass, bookmarks, reading history, and Web Admin Panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

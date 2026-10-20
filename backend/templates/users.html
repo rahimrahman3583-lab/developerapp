@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}ব্যবহারকারী ব্যবস্থাপনা — কুরআনিফাই{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>👥 ব্যবহারকারী তালিকা (User Management)</h1>
+        <p>সিস্টেম ব্যবহারকারী অনুসন্ধান ও প্রিমিয়াম অ্যাক্সেস নিয়ন্ত্রণ</p>
+    </div>
+
+    <div class="filter-bar">
+        <form method="GET" action="{{ url_for('admin_users') }}" class="search-form">
+            <input type="text" name="q" value="{{ search }}" placeholder="ইউজারনেম বা নাম লিখে খুঁজুন...">
+            <button type="submit" class="btn btn-gold">খুঁজুন</button>
+            {% if search %}
+            <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">রিসেট</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="section-card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>আইডি</th>
+                    <th>নাম</th>
+                    <th>ইউজারনেম</th>
+                    <th>রোল</th>
+                    <th>সাবস্ক্রিপশন</th>
+                    <th>নিবন্ধন তারিখ</th>
+                    <th>অ্যাকশন</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>#{{ u['id'] }}</td>
+                    <td><strong>{{ u['display_name'] }}</strong></td>
+                    <td>@{{ u['username'] }}</td>
+                    <td><span class="badge {% if u['role'] == 'admin' %}gold{% endif %}">{{ u['role'] }}</span></td>
+                    <td>
+                        <span class="status-badge {% if u['is_premium'] == 1 %}active{% else %}inactive{% endif %}">
+                            {{ u['premium_plan'] }}
+                        </span>
+                    </td>
+                    <td>{{ u['created_at'] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin_users') }}" style="display:inline;">
+                            <input type="hidden" name="action" value="toggle_premium">
+                            <input type="hidden" name="user_id" value="{{ u['id'] }}">
+                            {% if u['is_premium'] == 1 %}
+                            <button type="submit" class="btn btn-danger btn-sm">প্রিমিয়াম বাতিল</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-success btn-sm">প্রিমিয়াম মঞ্জুর</button>
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" style="text-align: center;">কোনো ব্যবহারকারী খুঁজে পাওয়া যায়নি।</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

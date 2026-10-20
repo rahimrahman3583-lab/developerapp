@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}এডমিন লগইন — কুরআনিফাই{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <span class="login-icon">🕌</span>
+            <h1>কুরআনিফাই এডমিন</h1>
+            <p>নিরাপদ সিস্টেম ব্যবস্থাপনা প্যানেলে প্রবেশ করুন</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('admin_login') }}" class="login-form">
+            <div class="form-group">
+                <label for="username">ইউজারনেম (Username):</label>
+                <input type="text" id="username" name="username" required placeholder="admin" autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">পাসওয়ার্ড (Password):</label>
+                <input type="password" id="password" name="password" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn btn-gold btn-block">লগইন করুন</button>
+        </form>
+
+        <div class="login-footer">
+            <small>ডিফল্ট ক্রেডেনশিয়াল: admin / Admin@123</small>
+        </div>
+    </div>
+</div>
+{% endblock %}

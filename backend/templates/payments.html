@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}পেমেন্ট অনুমোদন — কুরআনিফাই{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>💳 পেমেন্ট রিকোয়েস্ট ও অনুমোদন</h1>
+        <p>বিকাশ/নগদ/রকেটের ম্যানুয়াল পেমেন্ট রেফারেন্স যাচাইকরণ</p>
+    </div>
+
+    <div class="section-card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>আইডি</th>
+                    <th>ইউজারনেম</th>
+                    <th>প্ল্যান</th>
+                    <th>পরিমাণ</th>
+                    <th>পেমেন্ট মাধ্যম</th>
+                    <th>ট্রানজেকশন আইডি (TxID)</th>
+                    <th>স্ট্যাটাস</th>
+                    <th>অ্যাকশন</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>#{{ req['id'] }}</td>
+                    <td><strong>@{{ req['username'] }}</strong></td>
+                    <td>{{ req['plan_name'] }}</td>
+                    <td>{{ req['amount'] }}</td>
+                    <td><span class="badge">{{ req['method'] }}</span></td>
+                    <td><code>{{ req['transaction_id'] }}</code></td>
+                    <td>
+                        <span class="status-badge {% if req['status'] == 'Approved' %}active{% elif req['status'] == 'Rejected' %}inactive{% else %}pending{% endif %}">
+                            {{ req['status'] }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if req['status'] == 'Pending' %}
+                        <form method="POST" action="{{ url_for('admin_payments') }}" style="display:inline;">
+                            <input type="hidden" name="request_id" value="{{ req['id'] }}">
+                            <button type="submit" name="decision" value="approve" class="btn btn-success btn-sm">অনুমোদন</button>
+                            <button type="submit" name="decision" value="reject" class="btn btn-danger btn-sm">বাতিল</button>
+                        </form>
+                        {% else %}
+                        <em>সম্পন্ন</em>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" style="text-align: center;">কোনো পেমেন্ট রিকোয়েস্ট নেই।</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
